@@ -7,101 +7,124 @@
 <meta name="description" content="منوی کافه آوین، کنار دریاچه و جنگل">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;800&display=swap">
 <style>
-:root{--mist:#eef4ee;--sage:#a9c7b0;--lake:#bfdde2;--peach:#f6dccb;--pine:#2f4a3f;--gold:#c9a66b;--ink:#35524a}
+:root{--mist:#eef4ee;--sage:#a9c7b0;--lake:#bfdde2;--peach:#f6dccb;--pine:#2f4a3f;--deep:#1f332a;--gold:#c9a66b;--ink:#35524a}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth;scroll-padding-top:70px}
 body{font-family:Vazirmatn,Tahoma,sans-serif;background:var(--mist);color:var(--ink);line-height:1.8}
-.hero{position:relative;min-height:92vh;display:grid;place-items:center;text-align:center;color:#fff;background:linear-gradient(#2f4a3f55,#2f4a3f99),url(img/hero.jpg) center/cover}
-.hero h1{font-size:clamp(4rem,18vw,9rem);font-weight:800;line-height:1.1;text-shadow:0 6px 30px #0006}
-.hero p{font-weight:300;font-size:1.2rem;letter-spacing:.02em}
-.hero a{display:inline-block;margin-top:1.4rem;padding:.6rem 1.8rem;border-radius:99px;background:var(--peach);color:var(--pine);text-decoration:none;font-weight:500}
-.cup{position:absolute;bottom:26px;left:26px;width:70px;height:60px}
-.cup i{position:absolute;bottom:0;width:60px;height:38px;background:#fff;border-radius:4px 4px 30px 30px;left:0}
-.cup i:after{content:"";position:absolute;right:-16px;top:6px;width:18px;height:18px;border:5px solid #fff;border-radius:50%}
-.cup b{position:absolute;bottom:34px;width:8px;height:34px;border-radius:50%;background:#ffffffaa;filter:blur(5px);animation:st 3s infinite ease-out;opacity:0}
-.cup b:nth-child(1){left:14px}.cup b:nth-child(2){left:28px;animation-delay:1s}.cup b:nth-child(3){left:42px;animation-delay:2s}
-@keyframes st{0%{transform:translateY(0) scaleX(1);opacity:0}30%{opacity:.8}100%{transform:translateY(-50px) scaleX(2.4);opacity:0}}
+.hero{background:var(--deep);display:grid;place-items:center}
+.frame{position:relative;container-type:inline-size;width:min(100%,calc(100svh*.8));aspect-ratio:4/5;overflow:hidden;color:#fff;text-align:center}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.frame:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(#1f332ad9,#1f332a00 42%,#1f332a00 72%,#1f332a99)}
+.frame .t{position:absolute;z-index:2;top:5%;left:0;right:0}
+.frame h1{font-size:clamp(3.4rem,26cqw,8rem);font-weight:800;line-height:1.15;text-shadow:0 4px 24px #0007}
+.frame p{font-weight:300;font-size:clamp(.95rem,4.2cqw,1.3rem)}
+.frame a{position:absolute;z-index:2;bottom:5%;left:50%;transform:translateX(-50%);padding:.5rem 2rem;border-radius:99px;background:var(--peach);color:var(--pine);text-decoration:none;font-weight:500;white-space:nowrap}
+.steam{position:absolute;z-index:2;left:51.4%;top:59%;width:0;height:0}
+.steam b{position:absolute;bottom:0;width:2.6cqw;height:12cqw;margin-left:-1.3cqw;border-radius:50%;background:#fffffff2;filter:blur(1.6cqw);opacity:0;animation:st 4.5s infinite ease-out}
+.steam b:nth-child(2){left:2.4cqw;animation-delay:1.5s}.steam b:nth-child(3){left:-2.4cqw;animation-delay:3s}
+@keyframes st{0%{transform:translate(0,0) scale(.6,.6);opacity:0}25%{opacity:.7}100%{transform:translate(1.5cqw,-16cqw) scale(2.2,1.3);opacity:0}}
+.lake{position:relative;height:68svh;min-height:380px;overflow:hidden;background:#5d7a72}
+.lake img{width:100%;height:100%;object-fit:cover;object-position:50% 60%;animation:kb 40s ease-in-out infinite alternate}
+@keyframes kb{to{transform:scale(1.08)}}
+.lake canvas{position:absolute;inset:0;width:100%;height:100%}
+.lake:after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(#eef4ee00,var(--mist))}
+#rt{position:absolute;z-index:2;bottom:60px;right:14px;width:44px;height:44px;border:0;border-radius:50%;background:#ffffffcc;font-size:1.3rem;cursor:pointer}
 nav{position:sticky;top:0;z-index:5;display:flex;gap:.5rem;overflow-x:auto;padding:.7rem 1rem;background:#eef4eecc;backdrop-filter:blur(10px)}
 nav button{flex:none;font:inherit;border:0;padding:.4rem 1.1rem;border-radius:99px;background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 2px 8px #2f4a3f14}
 nav button.on{background:var(--sage);color:var(--pine);font-weight:800}
-nav button:focus-visible,.hero a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-main{max-width:980px;margin:auto;padding:1.5rem 1rem 4rem;min-height:60vh}
-h2{font-size:2rem;color:var(--pine);margin-bottom:.3rem}
-.note{font-size:.95rem;opacity:.75;margin-bottom:1rem}
-.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.2rem 2.5rem}
-.row{display:flex;align-items:baseline;gap:.6rem;padding:.55rem 0}
+button:focus-visible,.frame a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+main{max-width:980px;margin:auto;padding:1.2rem 1rem 3rem;min-height:60vh}
+.ban{height:170px;border-radius:26px;margin-bottom:1rem;display:flex;align-items:flex-end;padding:1rem 1.4rem;color:#fff;background:linear-gradient(#0000,#1f332acc),var(--bg) center 55%/cover}
+.ban h2{font-size:2rem;font-weight:800;text-shadow:0 2px 12px #0008}
+.note{font-size:.95rem;opacity:.75;margin-bottom:.8rem}
+.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.1rem 2.5rem}
+.row{display:flex;align-items:baseline;gap:.6rem;padding:.5rem 0}
 .row:after{content:"";order:1;flex:1;border-bottom:2px dotted var(--sage)}
 .row span{order:0}.row em{order:2;font-style:normal;font-weight:800;color:var(--pine);white-space:nowrap}
-.row em small{font-weight:300;font-size:.7rem;margin-inline-start:.2rem;opacity:.7}
+em small{font-weight:300;font-size:.7rem;margin-inline-start:.2rem;opacity:.7}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.4rem}
-.card{background:#fff;border-radius:28px 28px 28px 8px;padding:1.4rem;text-align:center;box-shadow:0 10px 30px #2f4a3f1a}
-.card em{display:block;font-style:normal;font-weight:800;font-size:1.2rem;color:var(--pine)}
-.card .e{font-size:2.6rem;display:block}
-.card p{font-size:.9rem;opacity:.75}
-.food{background:var(--pine);margin:0 -1rem;padding:1.5rem 1rem 2rem;border-radius:32px;color:var(--gold)}
-.food h2,.food em{color:var(--gold)}
-.fd{perspective:800px}
-.fd .in{background:#1f332a;border:1px solid #c9a66b66;border-radius:18px;padding:1.5rem 1rem;text-align:center;transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .15s;transform-style:preserve-3d;box-shadow:0 20px 40px #0005}
-.plate{width:120px;height:120px;margin:0 auto 1rem;border-radius:50%;display:grid;place-items:center;font-size:3rem;background:radial-gradient(circle at 35% 30%,#4a6155,#16241d 70%);box-shadow:0 14px 24px #0008,inset 0 0 0 6px #c9a66b44;transform:translateZ(40px)}
-.fd .in b{display:block;color:#f3e6c9;font-weight:500;transform:translateZ(25px)}
-.fd p{color:#c9a66bcc}
-.hk .card{background:linear-gradient(#fff,var(--peach))}
-.sea{position:relative;height:300px;border-radius:32px;overflow:hidden;margin-bottom:1.5rem;background:linear-gradient(#bfdde288,#7fb6c0aa),url(img/lake.jpg) center 60%/cover}
-.sea svg{position:absolute;width:90px;bottom:48px;animation:sail 16s linear infinite alternate}
-.sea svg:nth-child(2){bottom:80px;width:70px;animation-duration:22s;animation-delay:-8s}
-.sea svg:nth-child(3){bottom:30px;width:80px;animation-duration:19s;animation-delay:-3s}
-@keyframes sail{from{right:-10%;transform:translateY(0)}50%{transform:translateY(-6px)}to{right:90%;transform:translateY(0)}}
-.wave{position:absolute;bottom:0;width:200%;height:40px;background:radial-gradient(circle at 20px -8px,transparent 22px,#ffffffaa 23px) 0 0/40px 40px;animation:wv 6s linear infinite}
-@keyframes wv{to{transform:translateX(-40px)}}
-.act{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.4rem}
-.act div{background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 10px 30px #2f4a3f1a}
-.act img{width:100%;height:240px;object-fit:cover;display:block}
-.act section{padding:1rem 1.2rem}
-.strip{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:3rem}
-.strip img{width:100%;height:240px;object-fit:cover;border-radius:28px}
-footer{text-align:center;padding:2rem 1rem 5rem;color:var(--pine);background:var(--lake)}
-#rain{position:fixed;inset:0;pointer-events:none;z-index:4}
-#rt{position:fixed;bottom:16px;right:16px;z-index:6;width:48px;height:48px;border:0;border-radius:50%;background:#fff;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 16px #0003}
-@media(max-width:560px){.strip{grid-template-columns:1fr}.cup{left:14px;bottom:14px}}
+.card{background:#fff;border-radius:26px;overflow:hidden;text-align:center;box-shadow:0 10px 30px #2f4a3f1a;padding-bottom:1rem}
+.card em{display:block;font-style:normal;font-weight:800;color:var(--pine)}
+.card p{font-size:.9rem;opacity:.75;min-height:1.6em}
+.card b{display:block;margin-top:.6rem}
+.ph{position:relative;aspect-ratio:1.1;overflow:hidden;background:#222}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph i{position:absolute;inset:0;background:var(--t);mix-blend-mode:soft-light;opacity:.9}
+.ph u{position:absolute;right:10px;top:10px;font-size:1.5rem;text-decoration:none;background:#ffffffdd;border-radius:50%;width:42px;height:42px;display:grid;place-items:center}
+.ph s{position:absolute;left:55.7%;top:16%;width:14px;height:50px;margin-left:-7px;border-radius:50%;background:#ffffffcc;filter:blur(7px);opacity:0;animation:sm 5s infinite ease-out}
+.ph s:nth-of-type(2){animation-delay:1.7s}.ph s:nth-of-type(3){animation-delay:3.4s}
+@keyframes sm{0%{transform:translate(0,30px) scale(.5);opacity:0}30%{opacity:.7}100%{transform:translate(-12px,-110px) scale(2.6,1.6);opacity:0}}
+.food{background:var(--deep);margin:0 -1rem;padding:1.2rem 1rem 2rem;border-radius:30px;color:var(--gold)}
+.food .ban{margin-bottom:1.4rem}
+.fd{perspective:900px}
+.fl{animation:fl 6s ease-in-out infinite}
+.fd:nth-child(2n) .fl{animation-delay:-2s}.fd:nth-child(3n) .fl{animation-delay:-4s}
+@keyframes fl{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-9px) rotate(.6deg)}}
+.in{position:relative;background:#16241d;border:1px solid #c9a66b77;border-radius:22px;padding:.8rem .8rem 1.1rem;text-align:center;transform-style:preserve-3d;transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .12s;box-shadow:0 26px 40px #0007;touch-action:pan-y;cursor:pointer}
+.in .p{width:100%;aspect-ratio:1;border-radius:16px;object-fit:cover;display:block;transform:translateZ(60px) scale(.94);box-shadow:0 18px 30px #000a;transition:transform .12s}
+.in b{display:block;margin-top:.9rem;color:#f3e6c9;font-weight:500;transform:translateZ(35px)}
+.in p{color:#c9a66bcc;min-height:1.6em;transform:translateZ(25px)}
+.in em{display:block;font-style:normal;font-weight:800;transform:translateZ(30px)}
+.fd.pop .in{animation:pop .7s}
+@keyframes pop{30%{transform:scale(1.12) rotateZ(-5deg) rotateY(25deg)}60%{transform:scale(.97) rotateZ(4deg) rotateY(-20deg)}100%{transform:scale(1)}}
+.live{position:relative;overflow:hidden;aspect-ratio:1.1;background:#333}
+.live>*{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.live .bt{background:var(--im) center/cover;-webkit-mask-image:radial-gradient(ellipse 31% 17% at 76% 73%,#000 55%,#0000 100%);mask-image:radial-gradient(ellipse 31% 17% at 76% 73%,#000 55%,#0000 100%);transform-origin:76% 73%;animation:bob 5s ease-in-out infinite alternate}
+@keyframes bob{0%{transform:translate(2px,1px) rotate(-.7deg)}50%{transform:translate(-3px,-3px) rotate(.5deg)}100%{transform:translate(-7px,2px) rotate(.8deg)}}
+.live.dr img{animation:dr 18s ease-in-out infinite alternate}
+@keyframes dr{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.12) translate(-2%,-1%)}}
+.live:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,#fff0 30%,#ffffff22 50%,#fff0 70%) 0 0/250% 100%;animation:sh 9s linear infinite}
+@keyframes sh{to{background-position:-250% 0}}
+.act{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem}
+.strip{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;max-width:980px;margin:0 auto 3rem;padding:0 1rem}
+.strip img{width:100%;height:240px;object-fit:cover;border-radius:26px}
+footer a.ig{display:inline-flex;align-items:center;gap:.6rem;margin-top:1rem;padding:.5rem 1.3rem;border-radius:99px;background:#fff;color:var(--pine);text-decoration:none;direction:ltr;font-weight:500;box-shadow:0 4px 14px #2f4a3f22}
+footer a.ig svg{width:22px;height:22px}
+footer{text-align:center;padding:2rem 1rem 3rem;color:var(--pine);background:var(--lake)}
+@media(max-width:560px){.strip{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
 <body>
-<header class="hero">
- <div><p>کنار دریاچه، میان جنگل</p><h1>آوین</h1><p>کافه • قلیان • تفریحات آبی</p><a href="#menu">دیدن منو</a></div>
- <div class="cup" aria-hidden="true"><b></b><b></b><b></b><i></i></div>
-</header>
+<header class="hero"><div class="frame">
+ <img src="img/hero.jpg" alt="داخل کافه آوین رو به دریاچه">
+ <div class="t"><p>کنار دریاچه، میان جنگل</p><h1>آوین</h1><p>کافه • قلیان • تفریحات آبی</p></div>
+ <div class="steam" aria-hidden="true"><b></b><b></b><b></b></div>
+ <a href="#menu">دیدن منو</a>
+</div></header>
+<section class="lake"><img src="img/rain-lake.jpg" alt="دریاچه و جنگل در باران"><canvas id="rain" aria-hidden="true"></canvas><button id="rt" aria-label="روشن یا خاموش کردن باران">🌧</button></section>
 <nav id="tabs" aria-label="دسته‌بندی منو"></nav>
 <main id="menu"></main>
-<div style="max-width:980px;margin:auto;padding:0 1rem 3rem"><div class="strip"><img src="img/cabin.jpg" alt="فضای چوبی کافه آوین رو به دریاچه" loading="lazy"><img src="img/lake.jpg" alt="دریاچه و جنگل" loading="lazy"></div></div>
-<footer><b>کافه آوین</b><br>لحظه‌های خوب را با آوین تجربه کنید</footer>
-<canvas id="rain"></canvas>
-<button id="rt" aria-label="روشن یا خاموش کردن بارون" title="بارون">🌧</button>
-<svg width="0" height="0" style="position:absolute"><symbol id="pb" viewBox="0 0 90 50"><path d="M4 28h82l-10 16H16z" fill="#fff"/><path d="M4 28h82" stroke="#f6dccb" stroke-width="5"/><rect x="30" y="10" width="30" height="18" rx="9" fill="#f6dccb"/><path d="M8 44q37 8 74 0" fill="none" stroke="#ffffff99" stroke-width="3"/></symbol></svg>
+<div class="strip"><img src="img/cabin.jpg" alt="فضای چوبی کافه آوین" loading="lazy"><img src="img/lake.jpg" alt="دریاچه و جنگل" loading="lazy"></div>
+<footer><b>کافه آوین</b><br>لحظه‌های خوب را با آوین تجربه کنید<br><a class="ig" href="https://www.instagram.com/daryache_sabze_digesara" target="_blank" rel="noopener" aria-label="اینستاگرام کافه آوین"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>daryache_sabze_digesara</a></footer>
 <script>
 const $=s=>document.querySelector(s),fa=n=>n.toLocaleString('fa-IR');
 const price=(p,u)=>p==null?'<em>بپرسید</em>':`<em>${fa(p)}<small>${u}</small></em>`;
+const ban=c=>`<div class="ban" style="--bg:url(${c.bg})"><h2>${c.title}</h2></div>`+(c.note?`<p class="note">${c.note}</p>`:'');
 function render(c,u){
- const it=c.items;let h=`<h2>${c.title}</h2>`+(c.note?`<p class="note">${c.note}</p>`:'');
- if(c.id=='food')h=`<div class="food">${h}<div class="cards">`+it.map(i=>`<div class="fd"><div class="in"><div class="plate">${i.e}</div><b>${i.n}</b><p>${i.d||'&nbsp;'}</p>${price(i.p,u)}</div></div>`).join('')+'</div></div>';
- else if(c.id=='hookah')h+=`<div class="cards hk">`+it.map(i=>`<div class="card"><span class="e">${i.e}</span><b>${i.n}</b><p>${i.d||'&nbsp;'}</p>${price(i.p,u)}</div>`).join('')+'</div>';
- else if(c.id=='water')h+=`<div class="sea" role="img" aria-label="قایق‌های پدالی روی دریاچه"><svg><use href="#pb"/></svg><svg><use href="#pb"/></svg><svg><use href="#pb"/></svg><div class="wave"></div></div><div class="act">`+it.map(i=>`<div><img src="${i.img}" alt="${i.n}" loading="lazy"><section><b>${i.n}</b><p>${i.d}</p>${price(i.p,u)}</section></div>`).join('')+'</div>';
- else h+=`<div class="list">`+it.map(i=>`<div class="row"><span>${i.n}</span>${price(i.p,u)}</div>`).join('')+'</div>';
+ const it=c.items;let h;
+ if(c.id=='food')h=`<div class="food">${ban(c)}<div class="cards">`+it.map(i=>`<div class="fd"><div class="fl"><div class="in"><img class="p" src="${i.img}" alt="${i.n}" loading="lazy"><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div></div></div>`).join('')+'</div></div>';
+ else if(c.id=='hookah')h=ban(c)+`<div class="cards">`+it.map(i=>`<div class="card"><div class="ph" style="--t:${i.c}"><img src="img/hookah.jpg" alt="قلیان ${i.n}" loading="lazy"><i></i><s></s><s></s><s></s><u>${i.e}</u></div><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div>`).join('')+'</div>';
+ else if(c.id=='water')h=ban(c)+`<div class="act">`+it.map(i=>`<div class="card"><div class="live ${i.kind=='drift'?'dr':''}"><img src="${i.img}" alt="${i.n}">${i.kind=='boats'?`<div class="bt" style="--im:url(${i.img})"></div>`:''}</div><b>${i.n}</b><p>${i.d}</p>${price(i.p,u)}</div>`).join('')+'</div>';
+ else h=ban(c)+`<div class="list">`+it.map(i=>`<div class="row"><span>${i.e} ${i.n}</span>${price(i.p,u)}</div>`).join('')+'</div>';
  $('#menu').innerHTML=h;
- document.querySelectorAll('.fd').forEach(f=>{const n=f.firstChild;
-  f.onpointermove=e=>{const r=f.getBoundingClientRect();n.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*16+'deg');n.style.setProperty('--rx',(.5-(e.clientY-r.top)/r.height)*16+'deg')};
-  f.onpointerleave=()=>{n.style.setProperty('--rx','0deg');n.style.setProperty('--ry','0deg')}});
+ document.querySelectorAll('.fd').forEach(f=>{const n=f.querySelector('.in');
+  f.onpointermove=e=>{const r=f.getBoundingClientRect();n.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*60+'deg');n.style.setProperty('--rx',(.5-(e.clientY-r.top)/r.height)*60+'deg')};
+  f.onpointerleave=()=>{n.style.setProperty('--rx','0deg');n.style.setProperty('--ry','0deg')};
+  f.onpointerdown=()=>{f.classList.remove('pop');void f.offsetWidth;f.classList.add('pop')}});
 }
 fetch('menu.json').then(r=>r.json()).then(m=>{
  $('#tabs').innerHTML=m.categories.map((c,i)=>`<button data-i="${i}">${c.title}</button>`).join('');
  const go=i=>{document.querySelectorAll('nav button').forEach((b,j)=>b.classList.toggle('on',i==j));render(m.categories[i],m.unit)};
- $('#tabs').onclick=e=>{const b=e.target.closest('button');if(b){go(+b.dataset.i);$('#menu').scrollIntoView()}};
+ $('#tabs').onclick=e=>{const b=e.target.closest('button');if(b){go(+b.dataset.i);$('#tabs').scrollIntoView()}};
  go(0);
 }).catch(()=>$('#menu').innerHTML='<p>منو بارگذاری نشد. صفحه را دوباره باز کنید.</p>');
-const cv=$('#rain'),x=cv.getContext('2d');let on=!matchMedia('(prefers-reduced-motion:reduce)').matches,d=[];
-const rs=()=>{cv.width=innerWidth;cv.height=innerHeight;d=Array.from({length:Math.min(140,innerWidth/6)},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,l:10+Math.random()*14,s:6+Math.random()*6}))};
-addEventListener('resize',rs);rs();
-(function f(){x.clearRect(0,0,cv.width,cv.height);if(on){x.strokeStyle='rgba(140,185,205,.7)';x.lineWidth=1.2;x.beginPath();d.forEach(p=>{x.moveTo(p.x,p.y);x.lineTo(p.x-2,p.y+p.l);p.y+=p.s;if(p.y>cv.height){p.y=-20;p.x=Math.random()*cv.width}});x.stroke()}requestAnimationFrame(f)})();
+const cv=$('#rain'),x=cv.getContext('2d');let on=!matchMedia('(prefers-reduced-motion:reduce)').matches,vis=true,w,h,d=[],rp=[];
+const rs=()=>{const r=cv.getBoundingClientRect();w=cv.width=r.width;h=cv.height=r.height;d=Array.from({length:Math.round(w/4)},()=>({x:Math.random()*w,y:Math.random()*h,l:12+Math.random()*16,s:9+Math.random()*8}))};
+new ResizeObserver(rs).observe(cv);new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(cv);
+(function f(){if(vis){x.clearRect(0,0,w,h);if(on){x.strokeStyle='rgba(225,238,244,.6)';x.lineWidth=1.1;x.beginPath();d.forEach(p=>{x.moveTo(p.x,p.y);x.lineTo(p.x-2,p.y+p.l);p.y+=p.s;if(p.y>h){p.y=-20;p.x=Math.random()*w}});x.stroke();
+ if(Math.random()<.5)rp.push({x:Math.random()*w,y:h*.6+Math.random()*h*.32,r:1});
+ rp=rp.filter(q=>q.r<26);rp.forEach(q=>{x.strokeStyle=`rgba(235,245,248,${.55*(1-q.r/26)})`;x.beginPath();x.ellipse(q.x,q.y,q.r,q.r*.3,0,0,7);x.stroke();q.r+=.5})}}requestAnimationFrame(f)})();
 $('#rt').onclick=()=>on=!on;
 </script>
 </body>
