@@ -12,14 +12,14 @@
 html{scroll-behavior:smooth;scroll-padding-top:70px}
 body{font-family:Vazirmatn,Tahoma,sans-serif;background:var(--mist);color:var(--ink);line-height:1.8}
 .hero{background:var(--deep);display:grid;place-items:center}
-.frame{position:relative;container-type:inline-size;width:min(100%,calc(100svh*.8));aspect-ratio:4/5;overflow:hidden;color:#fff;text-align:center}
+.frame{position:relative;container-type:size;width:100%;height:100svh;overflow:hidden;color:#fff;text-align:center}
 .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .frame:before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(#1f332ad9,#1f332a00 42%,#1f332a00 72%,#1f332a99)}
 .frame .t{position:absolute;z-index:2;top:5%;left:0;right:0}
 .frame h1{font-size:clamp(3.4rem,26cqw,8rem);font-weight:800;line-height:1.15;text-shadow:0 4px 24px #0007}
 .frame p{font-weight:300;font-size:clamp(.95rem,4.2cqw,1.3rem)}
 .frame a{position:absolute;z-index:2;bottom:5%;left:50%;transform:translateX(-50%);padding:.5rem 2rem;border-radius:99px;background:var(--peach);color:var(--pine);text-decoration:none;font-weight:500;white-space:nowrap}
-.steam{position:absolute;z-index:2;left:51.4%;top:59%;width:0;height:0}
+.steam{position:absolute;z-index:2;left:calc(50cqw + .014*max(100cqw,100cqh));top:calc(50cqh + .095*max(100cqw,100cqh));width:0;height:0}
 .steam b{position:absolute;bottom:0;width:2.6cqw;height:12cqw;margin-left:-1.3cqw;border-radius:50%;background:#fffffff2;filter:blur(1.6cqw);opacity:0;animation:st 4.5s infinite ease-out}
 .steam b:nth-child(2){left:2.4cqw;animation-delay:1.5s}.steam b:nth-child(3){left:-2.4cqw;animation-delay:3s}
 @keyframes st{0%{transform:translate(0,0) scale(.6,.6);opacity:0}25%{opacity:.7}100%{transform:translate(1.5cqw,-16cqw) scale(2.2,1.3);opacity:0}}
@@ -51,7 +51,7 @@ em small{font-weight:300;font-size:.7rem;margin-inline-start:.2rem;opacity:.7}
 .ph img{width:100%;height:100%;object-fit:cover;display:block}
 .ph i{position:absolute;inset:0;background:var(--t);mix-blend-mode:soft-light;opacity:.9}
 .ph u{position:absolute;right:10px;top:10px;font-size:1.5rem;text-decoration:none;background:#ffffffdd;border-radius:50%;width:42px;height:42px;display:grid;place-items:center}
-.ph s{position:absolute;left:55.7%;top:16%;width:14px;height:50px;margin-left:-7px;border-radius:50%;background:#ffffffcc;filter:blur(7px);opacity:0;animation:sm 5s infinite ease-out}
+.ph s{position:absolute;left:var(--sx,55.7%);top:var(--sy,16%);width:14px;height:50px;margin-left:-7px;border-radius:50%;background:#ffffffcc;filter:blur(7px);opacity:0;animation:sm 5s infinite ease-out}
 .ph s:nth-of-type(2){animation-delay:1.7s}.ph s:nth-of-type(3){animation-delay:3.4s}
 @keyframes sm{0%{transform:translate(0,30px) scale(.5);opacity:0}30%{opacity:.7}100%{transform:translate(-12px,-110px) scale(2.6,1.6);opacity:0}}
 .food{background:var(--deep);margin:0 -1rem;padding:1.2rem 1rem 2rem;border-radius:30px;color:var(--gold)}
@@ -69,8 +69,9 @@ em small{font-weight:300;font-size:.7rem;margin-inline-start:.2rem;opacity:.7}
 @keyframes pop{30%{transform:scale(1.12) rotateZ(-5deg) rotateY(25deg)}60%{transform:scale(.97) rotateZ(4deg) rotateY(-20deg)}100%{transform:scale(1)}}
 .live{position:relative;overflow:hidden;aspect-ratio:1.1;background:#333}
 .live>*{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.live .bt{background:var(--im) center/cover;-webkit-mask-image:radial-gradient(ellipse 31% 17% at 76% 73%,#000 55%,#0000 100%);mask-image:radial-gradient(ellipse 31% 17% at 76% 73%,#000 55%,#0000 100%);transform-origin:76% 73%;animation:bob 5s ease-in-out infinite alternate}
-@keyframes bob{0%{transform:translate(2px,1px) rotate(-.7deg)}50%{transform:translate(-3px,-3px) rotate(.5deg)}100%{transform:translate(-7px,2px) rotate(.8deg)}}
+.live.bo{aspect-ratio:.9}
+.live .bt{inset:auto;left:52.2%;top:62%;width:45%;height:25%;object-fit:fill;transform-origin:50% 55%;animation:go 15s ease-in-out infinite alternate}
+@keyframes go{0%{transform:translate(0,0) scale(1) rotate(-.6deg)}50%{transform:translate(-22%,5%) scale(1.04) rotate(.6deg)}100%{transform:translate(-46%,11%) scale(1.1) rotate(-.4deg)}}
 .live.dr img{animation:dr 18s ease-in-out infinite alternate}
 @keyframes dr{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.12) translate(-2%,-1%)}}
 .live:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,#fff0 30%,#ffffff22 50%,#fff0 70%) 0 0/250% 100%;animation:sh 9s linear infinite}
@@ -104,8 +105,8 @@ const ban=c=>`<div class="ban" style="--bg:url(${c.bg})"><h2>${c.title}</h2></di
 function render(c,u){
  const it=c.items;let h;
  if(c.id=='food')h=`<div class="food">${ban(c)}<div class="cards">`+it.map(i=>`<div class="fd"><div class="fl"><div class="in"><img class="p" src="${i.img}" alt="${i.n}" loading="lazy"><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div></div></div>`).join('')+'</div></div>';
- else if(c.id=='hookah')h=ban(c)+`<div class="cards">`+it.map(i=>`<div class="card"><div class="ph" style="--t:${i.c}"><img src="img/hookah.jpg" alt="قلیان ${i.n}" loading="lazy"><i></i><s></s><s></s><s></s><u>${i.e}</u></div><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div>`).join('')+'</div>';
- else if(c.id=='water')h=ban(c)+`<div class="act">`+it.map(i=>`<div class="card"><div class="live ${i.kind=='drift'?'dr':''}"><img src="${i.img}" alt="${i.n}">${i.kind=='boats'?`<div class="bt" style="--im:url(${i.img})"></div>`:''}</div><b>${i.n}</b><p>${i.d}</p>${price(i.p,u)}</div>`).join('')+'</div>';
+ else if(c.id=='hookah')h=ban(c)+`<div class="cards">`+it.map(i=>`<div class="card"><div class="ph" style="--t:${i.c||'transparent'};--sx:${i.sx||'55.7%'};--sy:${i.sy||'16%'}"><img src="${i.img||'img/hookah.jpg'}" alt="قلیان ${i.n}" loading="lazy"><i></i><s></s><s></s><s></s><u>${i.e}</u></div><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div>`).join('')+'</div>';
+ else if(c.id=='water')h=ban(c)+`<div class="act">`+it.map(i=>`<div class="card"><div class="live ${i.kind=='drift'?'dr':'bo'}"><img src="${i.kind=='boats'?'img/pedal-base.jpg':i.img}" alt="${i.n}">${i.kind=='boats'?'<img class="bt" src="img/pedal-boats.png" alt="">':''}</div><b>${i.n}</b><p>${i.d}</p>${price(i.p,u)}</div>`).join('')+'</div>';
  else h=ban(c)+`<div class="list">`+it.map(i=>`<div class="row"><span>${i.e} ${i.n}</span>${price(i.p,u)}</div>`).join('')+'</div>';
  $('#menu').innerHTML=h;
  document.querySelectorAll('.fd').forEach(f=>{const n=f.querySelector('.in');
@@ -116,7 +117,7 @@ function render(c,u){
 fetch('menu.json').then(r=>r.json()).then(m=>{
  $('#tabs').innerHTML=m.categories.map((c,i)=>`<button data-i="${i}">${c.title}</button>`).join('');
  const go=i=>{document.querySelectorAll('nav button').forEach((b,j)=>b.classList.toggle('on',i==j));render(m.categories[i],m.unit)};
- $('#tabs').onclick=e=>{const b=e.target.closest('button');if(b){go(+b.dataset.i);$('#tabs').scrollIntoView()}};
+ $('#tabs').onclick=e=>{const b=e.target.closest('button');if(b){go(+b.dataset.i);scrollTo({top:$('#menu').getBoundingClientRect().top+scrollY-$('#tabs').offsetHeight-6,behavior:'instant'})}};
  go(0);
 }).catch(()=>$('#menu').innerHTML='<p>منو بارگذاری نشد. صفحه را دوباره باز کنید.</p>');
 const cv=$('#rain'),x=cv.getContext('2d');let on=!matchMedia('(prefers-reduced-motion:reduce)').matches,vis=true,w,h,d=[],rp=[];
