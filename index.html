@@ -72,6 +72,9 @@ em small{font-weight:300;font-size:.7rem;margin-inline-start:.2rem;opacity:.7}
 .live.bo{aspect-ratio:.9}
 .live .bt{inset:auto;left:52.2%;top:62%;width:45%;height:25%;object-fit:fill;transform-origin:50% 55%;animation:go 15s ease-in-out infinite alternate}
 @keyframes go{0%{transform:translate(0,0) scale(1) rotate(-.6deg)}50%{transform:translate(-22%,5%) scale(1.04) rotate(.6deg)}100%{transform:translate(-46%,11%) scale(1.1) rotate(-.4deg)}}
+.live.pd{aspect-ratio:4/3}
+.live .pdl{animation:glide 12s ease-in-out infinite alternate}
+@keyframes glide{0%{transform:translate(9%,0) rotate(.5deg)}50%{transform:translate(-3%,-1.5%) rotate(-.4deg)}100%{transform:translate(-14%,.8%) rotate(.6deg)}}
 .live.dr img{animation:dr 18s ease-in-out infinite alternate}
 @keyframes dr{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.12) translate(-2%,-1%)}}
 .live:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,#fff0 30%,#ffffff22 50%,#fff0 70%) 0 0/250% 100%;animation:sh 9s linear infinite}
@@ -102,11 +105,12 @@ footer{text-align:center;padding:2rem 1rem 3rem;color:var(--pine);background:var
 const $=s=>document.querySelector(s),fa=n=>n.toLocaleString('fa-IR');
 const price=(p,u)=>p==null?'<em>بپرسید</em>':`<em>${fa(p)}<small>${u}</small></em>`;
 const ban=c=>`<div class="ban" style="--bg:url(${c.bg})"><h2>${c.title}</h2></div>`+(c.note?`<p class="note">${c.note}</p>`:'');
+const live=i=>i.kind=='boats'?`<div class="live bo"><img src="img/pedal-base.jpg" alt="${i.n}"><img class="bt" src="img/pedal-boats.png" alt=""></div>`:`<div class="live pd"><img src="img/paddle-base.jpg" alt="${i.n}"><img class="bt pdl" style="left:41.25%;top:65.83%;width:29.84%;height:26.88%" src="img/paddle-layer.png" alt=""></div>`;
 function render(c,u){
  const it=c.items;let h;
  if(c.id=='food')h=`<div class="food">${ban(c)}<div class="cards">`+it.map(i=>`<div class="fd"><div class="fl"><div class="in"><img class="p" src="${i.img}" alt="${i.n}" loading="lazy"><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div></div></div>`).join('')+'</div></div>';
  else if(c.id=='hookah')h=ban(c)+`<div class="cards">`+it.map(i=>`<div class="card"><div class="ph" style="--t:${i.c||'transparent'};--sx:${i.sx||'55.7%'};--sy:${i.sy||'16%'}"><img src="${i.img||'img/hookah.jpg'}" alt="قلیان ${i.n}" loading="lazy"><i></i><s></s><s></s><s></s><u>${i.e}</u></div><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div>`).join('')+'</div>';
- else if(c.id=='water')h=ban(c)+`<div class="act">`+it.map(i=>`<div class="card"><div class="live ${i.kind=='drift'?'dr':'bo'}"><img src="${i.kind=='boats'?'img/pedal-base.jpg':i.img}" alt="${i.n}">${i.kind=='boats'?'<img class="bt" src="img/pedal-boats.png" alt="">':''}</div><b>${i.n}</b><p>${i.d}</p>${price(i.p,u)}</div>`).join('')+'</div>';
+ else if(c.id=='water')h=ban(c)+`<div class="act">`+it.map(i=>`<div class="card">${live(i)}<b>${i.n}</b><p>${i.d}</p>${price(i.p,u)}</div>`).join('')+'</div>';
  else h=ban(c)+`<div class="list">`+it.map(i=>`<div class="row"><span>${i.e} ${i.n}</span>${price(i.p,u)}</div>`).join('')+'</div>';
  $('#menu').innerHTML=h;
  document.querySelectorAll('.fd').forEach(f=>{const n=f.querySelector('.in');
