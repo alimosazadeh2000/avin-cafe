@@ -103,8 +103,13 @@ footer{text-align:center;padding:2rem 1rem 3rem;color:var(--pine);background:var
 <footer><b>کافه آوین</b><br>لحظه‌های خوب را با آوین تجربه کنید<br><a class="ig" href="https://www.instagram.com/daryache_sabze_digesara" target="_blank" rel="noopener" aria-label="اینستاگرام کافه آوین"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>daryache_sabze_digesara</a></footer>
 <script>
 const $=s=>document.querySelector(s),fa=n=>n.toLocaleString('fa-IR');
-const price=(p,u)=>p==null?'<em>بپرسید</em>':`<em>${fa(p)}<small>${u}</small></em>`;
+const price=(p,u)=>p==null?'<em>بپرسید</em>':typeof p=='string'?`<em>${p.replace(/</g,'&lt;')}</em>`:`<em>${fa(p)}<small>${u}</small></em>`;
 const ban=c=>`<div class="ban" style="--bg:url(${c.bg})"><h2>${c.title}</h2></div>`+(c.note?`<p class="note">${c.note}</p>`:'');
+const nz=s=>String(s).replace(/[\u200c\u200b\s]/g,'').replace(/ي/g,'ی').replace(/ك/g,'ک');
+const dg=s=>s.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+function csv(t){const r=[];let w=[],c='',q=false;for(let i=0;i<t.length;i++){const h=t[i];if(q){if(h=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=h}else if(h=='"')q=true;else if(h==','){w.push(c);c=''}else if(h=='\n'||h=='\r'){if(h=='\r'&&t[i+1]=='\n')i++;w.push(c);r.push(w);w=[];c=''}else c+=h}w.push(c);r.push(w);return r}
+async function applySheet(m){try{const k=new AbortController();setTimeout(()=>k.abort(),3500);const t=await(await fetch(m.sheet,{signal:k.signal})).text();const map={};csv(t).forEach(r=>{if(r.length>=3)map[nz(r[1])]=r[2].trim()});
+ m.categories.forEach(c=>c.items.forEach(i=>{const x=nz(i.n);if(x in map){const v=dg(map[x]).replace(/[,٬]/g,'');i.p=v===''?null:isNaN(v)?map[x]:Number(v)}}))}catch(e){}}
 const live=i=>i.kind=='boats'?`<div class="live bo"><img src="img/pedal-base.jpg" alt="${i.n}"><img class="bt" src="img/pedal-boats.png" alt=""></div>`:`<div class="live pd"><img src="img/paddle-base.jpg" alt="${i.n}"><img class="bt pdl" style="left:41.25%;top:65.83%;width:29.84%;height:26.88%" src="img/paddle-layer.png" alt=""></div>`;
 function render(c,u){
  const it=c.items;let h;
@@ -118,7 +123,7 @@ function render(c,u){
   f.onpointerleave=()=>{n.style.setProperty('--rx','0deg');n.style.setProperty('--ry','0deg')};
   f.onpointerdown=()=>{f.classList.remove('pop');void f.offsetWidth;f.classList.add('pop')}});
 }
-fetch('menu.json').then(r=>r.json()).then(m=>{
+fetch('menu.json').then(r=>r.json()).then(async m=>{if(m.sheet)await applySheet(m);
  $('#tabs').innerHTML=m.categories.map((c,i)=>`<button data-i="${i}">${c.title}</button>`).join('');
  const go=i=>{document.querySelectorAll('nav button').forEach((b,j)=>b.classList.toggle('on',i==j));render(m.categories[i],m.unit)};
  $('#tabs').onclick=e=>{const b=e.target.closest('button');if(b){go(+b.dataset.i);scrollTo({top:$('#menu').getBoundingClientRect().top+scrollY-$('#tabs').offsetHeight-6,behavior:'instant'})}};
