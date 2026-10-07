@@ -31,7 +31,8 @@ body{font-family:Vazirmatn,Tahoma,sans-serif;background:var(--mist);color:var(--
 .lake canvas{position:absolute;inset:0;width:100%;height:100%}
 .lake:after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(#eef4ee00,var(--mist))}
 #rt{position:absolute;z-index:2;bottom:60px;right:14px;width:44px;height:44px;border:0;border-radius:50%;background:#ffffffcc;font-size:1.3rem;cursor:pointer}
-nav{position:sticky;top:0;z-index:5;display:flex;gap:.5rem;overflow-x:auto;padding:.7rem 1rem;background:#eef4eecc;backdrop-filter:blur(10px)}
+nav{position:sticky;top:0;z-index:5;display:flex;gap:.5rem;overflow-x:auto;padding:.7rem 1.8rem;background:#eef4eecc;backdrop-filter:blur(10px);scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#0000,#000 26px,#000 calc(100% - 26px),#0000);mask-image:linear-gradient(90deg,#0000,#000 26px,#000 calc(100% - 26px),#0000)}
+nav::-webkit-scrollbar{display:none}
 nav button{flex:none;font:inherit;border:0;padding:.4rem 1.1rem;border-radius:99px;background:#fff;color:var(--ink);cursor:pointer;box-shadow:0 2px 8px #2f4a3f14}
 nav button.on{background:var(--sage);color:var(--pine);font-weight:800}
 button:focus-visible,.frame a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
@@ -108,10 +109,9 @@ const $=s=>document.querySelector(s),fa=n=>n.toLocaleString('fa-IR');
 const price=(p,u)=>p==null?'<em>بپرسید</em>':typeof p=='string'?`<em>${p.replace(/</g,'&lt;')}</em>`:`<em>${fa(p)}<small>${u}</small></em>`;
 const ban=c=>`<div class="ban" style="--bg:url(${c.bg})"><h2>${c.title}</h2></div>`+(c.note?`<p class="note">${c.note}</p>`:'');
 const nz=s=>String(s).replace(/[\u200c\u200b\s]/g,'').replace(/ي/g,'ی').replace(/ك/g,'ک');
-const dg=s=>s.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
-function csv(t){const r=[];let w=[],c='',q=false;for(let i=0;i<t.length;i++){const h=t[i];if(q){if(h=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=h}else if(h=='"')q=true;else if(h==','){w.push(c);c=''}else if(h=='\n'||h=='\r'){if(h=='\r'&&t[i+1]=='\n')i++;w.push(c);r.push(w);w=[];c=''}else c+=h}w.push(c);r.push(w);return r}
-async function applySheet(m){try{const k=new AbortController();setTimeout(()=>k.abort(),3500);const t=await(await fetch(m.sheet,{signal:k.signal})).text();const map={};csv(t).forEach(r=>{if(r.length>=3)map[nz(r[1])]=r[2].trim()});
- m.categories.forEach(c=>c.items.forEach(i=>{const x=nz(i.n);if(x in map){const v=dg(map[x]).replace(/[,٬]/g,'');i.p=v===''?null:isNaN(v)?map[x]:Number(v)}}))}catch(e){}}
+async function applyApi(m){let j=null;try{const k=new AbortController();setTimeout(()=>k.abort(),3500);j=await(await fetch(m.api,{signal:k.signal,cache:'no-store'})).json();localStorage.setItem('avinp',JSON.stringify(j))}catch(e){try{j=JSON.parse(localStorage.getItem('avinp'))}catch(e2){}}
+ if(!j||!j.prices)return;const map={};for(const k in j.prices)map[nz(k)]=j.prices[k];
+ m.categories.forEach(c=>c.items.forEach(i=>{const x=nz(i.n);if(x in map)i.p=map[x]}))}
 const live=i=>i.kind=='boats'?`<div class="live bo"><img src="img/pedal-base.jpg" alt="${i.n}"><img class="bt" src="img/pedal-boats.png" alt=""></div>`:`<div class="live pd"><img src="img/paddle-base.jpg" alt="${i.n}"><img class="bt pdl" style="left:41.25%;top:65.83%;width:29.84%;height:26.88%" src="img/paddle-layer.png" alt=""></div>`;
 function render(c,u){
  const it=c.items;let h;
@@ -125,11 +125,12 @@ function render(c,u){
   f.onpointerleave=()=>{n.style.setProperty('--rx','0deg');n.style.setProperty('--ry','0deg')};
   f.onpointerdown=()=>{f.classList.remove('pop');void f.offsetWidth;f.classList.add('pop')}});
 }
-fetch('menu.json').then(r=>r.json()).then(async m=>{if(m.sheet)await applySheet(m);
+fetch('menu.json').then(r=>r.json()).then(async m=>{if(m.api)await applyApi(m);
  $('#tabs').innerHTML=m.categories.map((c,i)=>`<button data-i="${i}">${c.title}</button>`).join('');
  const go=i=>{document.querySelectorAll('nav button').forEach((b,j)=>b.classList.toggle('on',i==j));render(m.categories[i],m.unit)};
- $('#tabs').onclick=e=>{const b=e.target.closest('button');if(b){go(+b.dataset.i);scrollTo({top:$('#menu').getBoundingClientRect().top+scrollY-$('#tabs').offsetHeight-6,behavior:'instant'})}};
+ $('#tabs').onclick=e=>{const b=e.target.closest('button');if(b){const n=$('#tabs'),r=b.getBoundingClientRect(),q=n.getBoundingClientRect();n.scrollBy({left:(r.left+r.width/2)-(q.left+q.width/2),behavior:'smooth'});go(+b.dataset.i);scrollTo({top:$('#menu').getBoundingClientRect().top+scrollY-$('#tabs').offsetHeight-6,behavior:'instant'})}};
  go(0);
+ const n=$('#tabs');if(!matchMedia('(prefers-reduced-motion:reduce)').matches&&!sessionStorage.getItem('nudge')&&n.scrollWidth>n.clientWidth+10){sessionStorage.setItem('nudge',1);const d=getComputedStyle(n).direction=='rtl'?-1:1;setTimeout(()=>n.scrollBy({left:d*80,behavior:'smooth'}),900);setTimeout(()=>n.scrollBy({left:-d*80,behavior:'smooth'}),1900)}
 }).catch(()=>$('#menu').innerHTML='<p>منو بارگذاری نشد. صفحه را دوباره باز کنید.</p>');
 const cv=$('#rain'),x=cv.getContext('2d');let on=!matchMedia('(prefers-reduced-motion:reduce)').matches,vis=true,w,h,d=[],rp=[];
 const rs=()=>{const r=cv.getBoundingClientRect();w=cv.width=r.width;h=cv.height=r.height;d=Array.from({length:Math.round(w/4)},()=>({x:Math.random()*w,y:Math.random()*h,l:12+Math.random()*16,s:9+Math.random()*8}))};
