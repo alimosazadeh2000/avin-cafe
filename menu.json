@@ -1,5 +1,5 @@
 {
- "sheet": "",
+ "api": "https://avin-panel.alimosazade.ir/api/prices",
  "unit": "هزار تومان",
  "categories": [
   {
