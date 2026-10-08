@@ -65,6 +65,7 @@ em small{font-weight:300;font-size:.7rem;margin-inline-start:.2rem;opacity:.7}
 @keyframes fl{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-9px) rotate(.6deg)}}
 .in{position:relative;background:#16241d;border:1px solid #c9a66b77;border-radius:22px;padding:.8rem .8rem 1.1rem;text-align:center;transform-style:preserve-3d;transform:rotateX(var(--rx,0)) rotateY(var(--ry,0));transition:transform .12s;box-shadow:0 26px 40px #0007;touch-action:pan-y;cursor:pointer}
 .in .p{width:100%;aspect-ratio:1;border-radius:16px;object-fit:cover;display:block;transform:translateZ(60px) scale(.94);box-shadow:0 18px 30px #000a;transition:transform .12s}
+.in .pp{width:100%;aspect-ratio:1;border-radius:16px;display:grid;place-items:center;font-size:4.2rem;background:radial-gradient(circle at 35% 30%,#2f4a3d,#16241d);transform:translateZ(60px) scale(.94);box-shadow:0 18px 30px #000a}
 .in b{display:block;margin-top:.9rem;color:#f3e6c9;font-weight:500;transform:translateZ(35px)}
 .in p{color:#c9a66bcc;min-height:1.6em;transform:translateZ(25px)}
 .in em{display:block;font-style:normal;font-weight:800;transform:translateZ(30px)}
@@ -110,15 +111,17 @@ const price=(p,u)=>p==null?'<em>بپرسید</em>':typeof p=='string'?`<em>${p.r
 const ban=c=>`<div class="ban" style="--bg:url(${c.bg})"><h2>${c.title}</h2></div>`+(c.note?`<p class="note">${c.note}</p>`:'');
 const nz=s=>String(s).replace(/[\u200c\u200b\s]/g,'').replace(/ي/g,'ی').replace(/ك/g,'ک');
 async function applyApi(m){let j=null;try{const k=new AbortController();setTimeout(()=>k.abort(),3500);j=await(await fetch(m.api,{signal:k.signal,cache:'no-store'})).json();localStorage.setItem('avinp',JSON.stringify(j))}catch(e){try{j=JSON.parse(localStorage.getItem('avinp'))}catch(e2){}}
- if(!j||!j.prices)return;const map={};for(const k in j.prices)map[nz(k)]=j.prices[k];
+ if(!j||!j.prices)return;
+ (j.items||[]).forEach(x=>{const c=m.categories.find(c=>c.id==x.cat);if(!c||c.items.some(i=>nz(i.n)==nz(x.n)))return;const it={n:x.n,e:x.e||'',d:x.d||'',p:x.p==null?null:x.p};const k=x.after?c.items.findIndex(i=>nz(i.n)==nz(x.after)):-1;k>=0?c.items.splice(k+1,0,it):c.items.push(it)});
+ const map={};for(const k in j.prices)map[nz(k)]=j.prices[k];
  m.categories.forEach(c=>c.items.forEach(i=>{const x=nz(i.n);if(x in map)i.p=map[x]}))}
 const live=i=>i.kind=='boats'?`<div class="live bo"><img src="img/pedal-base.jpg" alt="${i.n}"><img class="bt" src="img/pedal-boats.png" alt=""></div>`:`<div class="live pd"><img src="img/paddle-base.jpg" alt="${i.n}"><img class="bt pdl" style="left:41.25%;top:65.83%;width:29.84%;height:26.88%" src="img/paddle-layer.png" alt=""></div>`;
 function render(c,u){
  const it=c.items;let h;
- if(c.id=='food')h=`<div class="food">${ban(c)}<div class="cards">`+it.map(i=>`<div class="fd"><div class="fl"><div class="in"><img class="p" src="${i.img}" alt="${i.n}" loading="lazy"><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div></div></div>`).join('')+'</div></div>';
- else if(c.id=='hookah')h=ban(c)+`<div class="cards">`+it.map(i=>`<div class="card"><div class="ph" style="--t:${i.c||'transparent'};--sx:${i.sx||'55.7%'};--sy:${i.sy||'16%'}"><img src="${i.img||'img/hookah.jpg'}" alt="قلیان ${i.n}" loading="lazy"><i></i><s></s><s></s><s></s><u>${i.e}</u></div><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div>`).join('')+'</div>';
+ if(c.id=='food')h=`<div class="food">${ban(c)}<div class="cards">`+it.map(i=>`<div class="fd"><div class="fl"><div class="in">${i.img?`<img class="p" src="${i.img}" alt="${i.n}" loading="lazy">`:`<div class="pp">${i.e||'🍽️'}</div>`}<b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div></div></div>`).join('')+'</div></div>';
+ else if(c.id=='hookah')h=ban(c)+`<div class="cards">`+it.map(i=>`<div class="card"><div class="ph" style="--t:${i.c||'transparent'};--sx:${i.sx||'55.7%'};--sy:${i.sy||'16%'}"><img src="${i.img||'img/hookah.jpg'}" alt="قلیان ${i.n}" loading="lazy"><i></i><s></s><s></s><s></s>${i.e?`<u>${i.e}</u>`:''}</div><b>${i.n}</b><p>${i.d||''}</p>${price(i.p,u)}</div>`).join('')+'</div>';
  else if(c.id=='water')h=ban(c)+`<div class="act">`+it.map(i=>`<div class="card">${live(i)}<b>${i.n}</b><p>${i.d}</p>${price(i.p,u)}</div>`).join('')+'</div>';
- else h=ban(c)+`<div class="list">`+it.map(i=>`<div class="row"><span>${i.e} ${i.n}</span>${price(i.p,u)}</div>`).join('')+'</div>';
+ else h=ban(c)+`<div class="list">`+it.map(i=>`<div class="row"><span>${i.e?i.e+' ':''}${i.n}</span>${price(i.p,u)}</div>`).join('')+'</div>';
  $('#menu').innerHTML=h;
  document.querySelectorAll('.fd').forEach(f=>{const n=f.querySelector('.in');
   f.onpointermove=e=>{const r=f.getBoundingClientRect();n.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*60+'deg');n.style.setProperty('--rx',(.5-(e.clientY-r.top)/r.height)*60+'deg')};
